@@ -1,13 +1,18 @@
-"""
-----------------------------------------
-Threshold Limits for BMS:
-----------------------------------------    
-Temperature      : Celsius
-State of Charge  : Percentage
-Charge Rate      : Ratio (0 to 1)
-----------------------------------------
-"""
+# =============================================================================
+# ---------------------------------------------
+# Battery Monitoring Threshold Limits for BMS:
+# ---------------------------------------------    
+# Temperature      : Celsius
+# State of Charge  : Percentage
+# Charge Rate      : Ratio (0 to 1)
+# ---------------------------------------------
+# =============================================================================
 
+
+#Declare the battery type currently used
+CURRENT_BATTERYPACK       =   'Lithium'
+
+#Declare operating threshold params for different battery packs
 batteryThresholdParams = { 'Lithium' : 
                             {
                             'Temperature'  : { 'lower':  0   , 'upper': 45 },
@@ -80,9 +85,6 @@ def isLimitNotNone(arg):
 
 if __name__ == '__main__':
     
-  #declare the battery type to test
-  CURRENT_BATTERYPACK       =   'Lithium'
-  
   #Create boundary values for test - middle range, upper limit, lower limit
   temperature_limits = batteryThresholdParams[CURRENT_BATTERYPACK]['Temperature']
   soc_limits         = batteryThresholdParams[CURRENT_BATTERYPACK]['StateOfCharge']
