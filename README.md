@@ -56,3 +56,18 @@ Shorten the Semantic distance
 - Functional to express relation between input and output
 - Object oriented to encapsulate state with actions
 - Apect oriented to capture repeating aspects
+
+## Notes to Trainer
+
+Approach taken to assignment
+
+Dynamic Code to handle
+- New battery packs in future
+- New vital parameters in future (like temperature, Charge Rate etc)
+- Modify existing vital parameter range
+
+Dynamic Test case to test any kind of battery pack with its vital operating paramters
+
+All test cases along the boundary taken care ( Upper/Lower limit breach, Borderline / Edge testcase)
+    
+ 
