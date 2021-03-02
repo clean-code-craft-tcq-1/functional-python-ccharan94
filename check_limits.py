@@ -36,43 +36,47 @@ def battery_is_ok(**kwargs):
   BATTERY_CONDITION_ALL_OK  = True
   
   for criteria, criteriavalue in kwargs.items():
-      isWithinLimits = checkBoundaryCondition(batteryLimits,criteria, criteriavalue)
+      lower,upper    = getBoundaryConditions(batteryLimits,criteria, criteriavalue)
+      isWithinLimits = checkRangeLimits (criteria,criteriavalue,lower,upper)
        
       if isWithinLimits is False:
           BATTERY_CONDITION_ALL_OK = False        
             
   return BATTERY_CONDITION_ALL_OK
 
-def checkBoundaryCondition(batteryLimits,criteria, criteriavalue):
-      if 'upper' in batteryLimits[criteria] and 'lower' in batteryLimits[criteria]:         
-          upper = batteryLimits[criteria]['upper']
-          lower = batteryLimits[criteria]['lower']
-          isWithinLimits = checkRangeLimit(criteria,criteriavalue,upper,lower)
-      elif 'upper' in batteryLimits[criteria] and 'lower' not in batteryLimits[criteria]:
-          upper = batteryLimits[criteria]['upper']
-          isWithinLimits = checkUpperLimit(criteria,criteriavalue,upper)
-      elif 'upper' not in batteryLimits[criteria] and 'lower' in batteryLimits[criteria]:
-          lower = batteryLimits[criteria]['lower']
-          isWithinLimits = checkLowerLimit(criteria,criteriavalue,lower)
+def getBoundaryConditions(batteryLimits,criteria, criteriavalue):
+      upper = lower = None    
+      upper = batteryLimits[criteria]['upper'] if 'upper' in batteryLimits[criteria] else None
+      lower = batteryLimits[criteria]['lower'] if 'lower' in batteryLimits[criteria] else None
           
-      return isWithinLimits  
+      return lower,upper 
+
+def checkRangeLimits(criteria,criteriavalue,lower,upper):    
+  
+    if checkLowerLimitBreach(criteriavalue,lower)  or checkUpperLimitBreach(criteriavalue,upper):
+        print ('Alert: {} Threshold Value breached. Current value is {}'.format(criteria,criteriavalue))
+        return False
+    else:
+        return True
     
-def checkUpperLimit(criteria,criteriavalue,upper):
-    if  criteriavalue > upper :
-        print ('Alert: {} Threshold Value breached. Current value is {}'.format(criteria,criteriavalue))
+def checkLowerLimitBreach(criteriavalue,lower):
+    if isLimitNotNone(lower) and criteriavalue < lower:
+        return True
+    else:
+        return False
+
+def checkUpperLimitBreach(criteriavalue,upper):
+    if isLimitNotNone(upper) and criteriavalue > upper:
+        return True
+    else:
         return False
     
-
-def checkLowerLimit(criteria,criteriavalue,lower):
-    if criteriavalue < lower :
-        print ('Alert: {} Threshold Value breached. Current value is {}'.format(criteria,criteriavalue))
+def isLimitNotNone(arg):
+    if arg is None:
         return False
-
-def checkRangeLimit(criteria,criteriavalue,upper,lower):
-    if criteriavalue < lower  or criteriavalue > upper:
-        print ('Alert: {} Threshold Value breached. Current value is {}'.format(criteria,criteriavalue))
-        return False
-
+    else:
+        return True
+         
 
 if __name__ == '__main__':
     
