@@ -36,7 +36,15 @@ def battery_is_ok(**kwargs):
   BATTERY_CONDITION_ALL_OK  = True
   
   for criteria, criteriavalue in kwargs.items():
-      if 'upper' in batteryLimits[criteria] and 'lower' in batteryLimits[criteria]:
+      isWithinLimits = checkBoundaryCondition(batteryLimits,criteria, criteriavalue)
+       
+      if isWithinLimits is False:
+          BATTERY_CONDITION_ALL_OK = False        
+            
+  return BATTERY_CONDITION_ALL_OK
+
+def checkBoundaryCondition(batteryLimits,criteria, criteriavalue):
+      if 'upper' in batteryLimits[criteria] and 'lower' in batteryLimits[criteria]:         
           upper = batteryLimits[criteria]['upper']
           lower = batteryLimits[criteria]['lower']
           isWithinLimits = checkRangeLimit(criteria,criteriavalue,upper,lower)
@@ -46,12 +54,9 @@ def battery_is_ok(**kwargs):
       elif 'upper' not in batteryLimits[criteria] and 'lower' in batteryLimits[criteria]:
           lower = batteryLimits[criteria]['lower']
           isWithinLimits = checkLowerLimit(criteria,criteriavalue,lower)
-       
-      if isWithinLimits is False:
-          BATTERY_CONDITION_ALL_OK = False        
-            
-  return BATTERY_CONDITION_ALL_OK
-
+          
+      return isWithinLimits  
+    
 def checkUpperLimit(criteria,criteriavalue,upper):
     if  criteriavalue > upper :
         print ('Alert: {} Threshold Value breached. Current value is {}'.format(criteria,criteriavalue))
@@ -104,7 +109,7 @@ if __name__ == '__main__':
   #Testcase for normal State of charge working range 
   assert(battery_is_ok(Temperature = temp_middle_range, StateOfCharge = soc_middle_range, ChargeRate = chargerate_middle_range) is True), 'SOC Range Test'
   #Testcase to check Upper limit breach for State of charge
-  assert(battery_is_ok(Temperature = temp_middle_range, StateOfCharge = soc_limits['upper']+5, ChargeRate = chargerate_middle_range) is False), 'SOC Upper Limit Test'
+  assert(battery_is_ok(Temperature = temp_middle_range, StateOfCharge = soc_limits['upper']+5, ChargeRate = chargerate_middle_range) is False), 'SOC Limit Test'
   #Testcase to check Lower limit breach for State of charge 
   assert(battery_is_ok(Temperature = temp_middle_range, StateOfCharge = soc_limits['lower']-5, ChargeRate = chargerate_middle_range) is False), 'SOC Lower Limit Test'
   #Upper limit edge testcase for State of charge 
