@@ -63,10 +63,10 @@ Approach taken to assignment
 
 Dynamic Code to handle
 - New battery packs in future
-- New vital parameters in future (like temperature, Charge Rate etc)
+- New vital parameters in future (apart from temperature, Charge Rate, State of Charge)
 - Modify existing vital parameter range
 
-Dynamic Test case to test any kind of battery pack with its vital operating paramters
+Dynamic Test case to test any kind of battery pack with its corresponding vital operating paramters
 
 All test cases along the boundary taken care ( Upper/Lower limit breach, Borderline / Edge testcase)
     
